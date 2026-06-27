@@ -26,7 +26,7 @@ body{overflow-x:hidden;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothin
 .bottom-row{position:absolute;bottom:clamp(60px,12vh,140px);left:0;right:0;display:flex;align-items:center;justify-content:center;gap:clamp(16px,3vw,40px);padding:0 24px;flex-wrap:wrap}
 .coming-soon{font-family:'Instrument Serif',serif;font-weight:400;font-style:italic;color:#fff;font-size:clamp(26px,3.5vw,45px);line-height:1.2;white-space:nowrap}
 
-.btn-subscribe{border:none;outline:none;cursor:pointer;background:#D3030A;color:#F8F3ED;font-family:'Montserrat',sans-serif;font-weight:500;font-size:14px;text-transform:uppercase;letter-spacing:0.1em;line-height:1.5;padding:15px 40px;border-radius:30px;transition:background-color 0.5s,border-color 0.5s}
+.btn-subscribe{display:inline-block;border:none;outline:none;cursor:pointer;background:#D3030A;color:#F8F3ED;text-decoration:none;font-family:'Montserrat',sans-serif;font-weight:500;font-size:14px;text-transform:uppercase;letter-spacing:0.1em;line-height:1.5;padding:15px 40px;border-radius:30px;transition:background-color 0.5s,border-color 0.5s}
 .btn-subscribe:hover{background:#9C190D}
 
 .overlay{position:fixed;inset:0;z-index:100;background:rgba(0,0,0,0.3);display:flex;align-items:flex-start;justify-content:center;padding-top:clamp(30px,6vh,80px);opacity:0;visibility:hidden;pointer-events:none;transition:opacity 0.5s ease,visibility 0.5s ease}
@@ -92,12 +92,9 @@ body{overflow-x:hidden;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothin
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><polygon points="405 121.8 390.2 107 256 241.2 121.8 107 107 121.8 241.2 256 107 390.2 121.8 405 256 270.8 390.2 405 405 390.2 270.8 256 405 121.8"></polygon></svg>
     </button>
     <h2 class="popup-title"><i>Almost</i> there!</h2>
-    <p class="popup-desc">Sign up with your email to be the first to know when we launch.</p>
+    <p class="popup-desc">Join the official launch list for exclusive updates, early access, and special announcements.</p>
     <div id="formArea">
-      <div class="email-form" id="emailForm">
-        <input class="email-input" id="emailInput" type="email" placeholder="Enter your email">
-        <button class="btn-submit" id="submitBtn">subscribe</button>
-      </div>
+      <a class="btn-subscribe" href="https://docs.google.com/forms/d/e/1FAIpQLSea031eGxR9Kg8X1a29OkqeSZeNV_hEyFq0mFBRABkMd3TK7g/viewform" target="_blank" rel="noopener">join the list</a>
     </div>
   </div>
 </div>
@@ -106,12 +103,8 @@ body{overflow-x:hidden;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothin
 (function() {
   var overlay = document.getElementById('overlay');
   var popupCard = document.getElementById('popupCard');
-  var emailInput = document.getElementById('emailInput');
-  var formArea = document.getElementById('formArea');
 
   document.getElementById('openPopup').addEventListener('click', function() {
-    formArea.innerHTML = '<div class="email-form"><input class="email-input" id="emailInput" type="email" placeholder="Enter your email"><button class="btn-submit" id="submitBtn">subscribe</button></div>';
-    attachFormListeners();
     overlay.classList.add('open');
   });
 
@@ -126,40 +119,6 @@ body{overflow-x:hidden;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothin
   popupCard.addEventListener('click', function(e) {
     e.stopPropagation();
   });
-
-  function attachFormListeners() {
-    var input = document.getElementById('emailInput');
-    var btn = document.getElementById('submitBtn');
-    if (!input || !btn) return;
-
-    btn.addEventListener('click', doSubmit);
-    input.addEventListener('keydown', function(e) {
-      if (e.key === 'Enter') doSubmit();
-    });
-  }
-
-  var CRM_API = 'http://localhost:3001';
-
-  function doSubmit() {
-    var input = document.getElementById('emailInput');
-    if (!input) return;
-    var email = input.value.trim();
-    if (email && email.indexOf('@') > -1 && email.indexOf('.') > -1) {
-      var btn = document.getElementById('submitBtn');
-      if (btn) btn.textContent = '...';
-      fetch(CRM_API + '/api/subscribe', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: email })
-      }).then(function(r) { return r.json(); }).then(function() {
-        formArea.innerHTML = '<div class="success-msg">You\'re on the list. We\'ll be in touch soon.</div>';
-      }).catch(function() {
-        formArea.innerHTML = '<div class="success-msg">You\'re on the list. We\'ll be in touch soon.</div>';
-      });
-    }
-  }
-
-  attachFormListeners();
 })();
 </script>
 </body>
